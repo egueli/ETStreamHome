@@ -1,4 +1,4 @@
-package it.e_gueli.smsas;
+package it.e_gueli.smsas.ui;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

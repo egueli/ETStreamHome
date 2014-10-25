@@ -1,4 +1,4 @@
-package it.e_gueli.smsas;
+package it.e_gueli.smsas.sftp;
 
 import android.util.Log;
 
