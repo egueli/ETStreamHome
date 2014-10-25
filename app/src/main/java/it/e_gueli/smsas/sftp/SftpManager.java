@@ -27,6 +27,8 @@ public class SftpManager {
     @Bean
     StoredOrAskedUserInfo storedOrAskedUserInfo;
 
+    // If you see an error like "symbol not found" here, try changing something in build.gradle
+    // and do Sync now, then Make module 'app'.
     @Pref
     SftpPrefs_ prefs;
 

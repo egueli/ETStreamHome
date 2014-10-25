@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MyActivity_"
+            android:name=".ui.MyActivity_"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,6 +23,8 @@
         <activity
             android:name=".ui.SettingsActivity_"
             android:label="@string/action_settings" />
+
+        <service android:name=".player.PlayerService_" />
     </application>
 
 </manifest>
