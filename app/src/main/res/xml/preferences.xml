@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="sshServerAddress"
+        android:title="Server address" />
+    <EditTextPreference
+        android:key="sshServerPort"
+        android:title="Server port"
+        android:inputType="number"/>
+
+    <EditTextPreference
+        android:key="sshUserName"
+        android:title="User name" />
+
+    <EditTextPreference
+        android:key="sshPassword"
+        android:title="Password"
+        android:inputType="textPassword" />
+</PreferenceScreen>
