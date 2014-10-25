@@ -1,4 +1,4 @@
-package it.e_gueli.myapplication.ui;
+package it.e_gueli.smsas.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;

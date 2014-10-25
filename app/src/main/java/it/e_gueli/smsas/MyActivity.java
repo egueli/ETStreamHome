@@ -1,4 +1,4 @@
-package it.e_gueli.myapplication;
+package it.e_gueli.smsas;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
@@ -33,12 +33,11 @@ import java.io.InputStream;
 import java.util.Vector;
 
 import fi.iki.elonen.SimpleWebServer;
-import it.e_gueli.myapplication.sftp.SftpManager;
-import it.e_gueli.myapplication.sftp.StoredOrAskedUserInfo;
-import it.e_gueli.myapplication.songdb.DatabaseHelper;
-import it.e_gueli.myapplication.songdb.Song;
-import it.e_gueli.myapplication.ui.SettingsActivity;
-import it.e_gueli.myapplication.ui.SettingsActivity_;
+import it.e_gueli.smsas.sftp.SftpManager;
+import it.e_gueli.smsas.sftp.StoredOrAskedUserInfo;
+import it.e_gueli.smsas.songdb.DatabaseHelper;
+import it.e_gueli.smsas.songdb.Song;
+import it.e_gueli.smsas.ui.SettingsActivity_;
 
 @EActivity(R.layout.activity_my)
 @OptionsMenu(R.menu.my)

@@ -1,4 +1,4 @@
-package it.e_gueli.myapplication;
+package it.e_gueli.smsas;
 
 import android.util.Log;
 
@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.e_gueli.myapplication.songdb.DatabaseHelper;
-import it.e_gueli.myapplication.songdb.Song;
-import it.e_gueli.myapplication.songdb.WordMatch;
+import it.e_gueli.smsas.songdb.DatabaseHelper;
+import it.e_gueli.smsas.songdb.Song;
+import it.e_gueli.smsas.songdb.WordMatch;
 
 /**
  * Created by ris8 on 22/10/14.

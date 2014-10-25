@@ -1,4 +1,4 @@
-package it.e_gueli.myapplication.sftp;
+package it.e_gueli.smsas.sftp;
 
 import android.content.Context;
 
@@ -14,8 +14,6 @@ import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.File;
-
-import it.e_gueli.myapplication.sftp.StoredOrAskedUserInfo;
 
 /**
  * Created by ris8 on 23/10/14.

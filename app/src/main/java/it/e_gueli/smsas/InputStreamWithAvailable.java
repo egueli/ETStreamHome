@@ -1,6 +1,5 @@
-package it.e_gueli.myapplication;
+package it.e_gueli.smsas;
 
-import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.IOException;

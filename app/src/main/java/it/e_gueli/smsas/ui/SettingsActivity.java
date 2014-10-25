@@ -1,4 +1,4 @@
-package it.e_gueli.myapplication.ui;
+package it.e_gueli.smsas.ui;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -7,13 +7,12 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.text.InputType;
-import android.widget.EditText;
 
 import org.androidannotations.annotations.EActivity;
 
 import java.util.Map;
 
-import it.e_gueli.myapplication.R;
+import it.e_gueli.smsas.R;
 
 /**
  * Created by ris8 on 25/10/14.

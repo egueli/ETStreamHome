@@ -1,4 +1,4 @@
-package it.e_gueli.myapplication.songdb;
+package it.e_gueli.smsas.songdb;
 
 import java.sql.SQLException;
 
@@ -10,7 +10,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-import it.e_gueli.myapplication.R;
+import it.e_gueli.smsas.R;
 
 /**
  * Database helper class used to manage the creation and upgrading of your database. This class also usually provides

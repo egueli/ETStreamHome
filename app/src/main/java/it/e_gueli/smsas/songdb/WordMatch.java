@@ -1,4 +1,4 @@
-package it.e_gueli.myapplication.songdb;
+package it.e_gueli.smsas.songdb;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

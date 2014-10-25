@@ -1,7 +1,6 @@
-package it.e_gueli.myapplication;
+package it.e_gueli.smsas;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +9,13 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
-import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.OrmLiteDao;
 import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.Trace;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,9 +23,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import it.e_gueli.myapplication.songdb.DatabaseHelper;
-import it.e_gueli.myapplication.songdb.Song;
-import it.e_gueli.myapplication.songdb.WordMatch;
+import it.e_gueli.smsas.songdb.DatabaseHelper;
+import it.e_gueli.smsas.songdb.Song;
+import it.e_gueli.smsas.songdb.WordMatch;
 
 /**
  * Created by ris8 on 23/10/14.

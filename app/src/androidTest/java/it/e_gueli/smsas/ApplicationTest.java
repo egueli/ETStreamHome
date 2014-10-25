@@ -1,4 +1,4 @@
-package it.e_gueli.myapplication;
+package it.e_gueli.smsas;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

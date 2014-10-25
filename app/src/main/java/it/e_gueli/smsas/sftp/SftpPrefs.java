@@ -1,4 +1,4 @@
-package it.e_gueli.myapplication.sftp;
+package it.e_gueli.smsas.sftp;
 
 import org.androidannotations.annotations.sharedpreferences.SharedPref;
 

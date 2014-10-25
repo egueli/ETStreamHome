@@ -1,4 +1,4 @@
-package it.e_gueli.myapplication.sftp;
+package it.e_gueli.smsas.sftp;
 
 import android.app.Activity;
 import android.util.Log;
@@ -10,7 +10,7 @@ import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
-import it.e_gueli.myapplication.ui.Prompter;
+import it.e_gueli.smsas.ui.Prompter;
 
 /**
  * Created by ris8 on 20/10/14.
