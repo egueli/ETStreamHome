@@ -125,7 +125,7 @@ public class PlayerService extends Service {
             }), size);
 
             if (server == null)
-                server = new SimpleWebServer("0.0.0.0", 8080, new File("/sdcard/Music"), false);
+                server = new SimpleWebServer("127.0.0.1", 8080, new File("/sdcard/Music"), false);
 
             server.setHttpStream(new BufferedInputStream(stream, 131072));
 
