@@ -1,11 +1,14 @@
 package it.e_gueli.smsas.player;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.MediaController;
 
@@ -23,8 +26,10 @@ import java.io.InputStream;
 import java.util.Vector;
 
 import fi.iki.elonen.SimpleWebServer;
+import it.e_gueli.smsas.R;
 import it.e_gueli.smsas.sftp.InputStreamWithAvailable;
 import it.e_gueli.smsas.sftp.SftpManager;
+import it.e_gueli.smsas.ui.MyActivity_;
 
 /**
  * Created by ris8 on 26/10/14.
@@ -75,6 +80,23 @@ public class PlayerService extends Service {
                 });
             }
         });
+
+        createNotification(songPath);
+    }
+
+    private static final int NOTIFICATION_ID = 665455242; // any number is OK as long it's not 0
+
+    private void createNotification(String songName) {
+        PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
+                MyActivity_.intent(getApplicationContext()).get(),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification notification = new Notification();
+        notification.tickerText = "Song playing"; // TODO pass a Song object so we get the title
+        notification.icon = android.R.drawable.ic_media_play;
+        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        notification.setLatestEventInfo(getApplicationContext(), "MusicPlayerSample",
+                "Playing: " + songName, pi);
+        startForeground(NOTIFICATION_ID, notification);
     }
 
     @Bean
