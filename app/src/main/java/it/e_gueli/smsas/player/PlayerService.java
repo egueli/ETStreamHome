@@ -43,6 +43,8 @@ public class PlayerService extends Service {
 
     private static final String TAG = PlayerService.class.getSimpleName();
 
+    //region Binder stuff
+
     public class LocalBinder extends Binder {
         public PlayerService getService() {
             return PlayerService.this;
@@ -56,7 +58,8 @@ public class PlayerService extends Service {
         return binder;
     }
 
-    private MediaController mMediaController;
+    //endregion
+
     private MediaPlayer mMediaPlayer;
     private Handler mHandler = new Handler();
 
@@ -64,9 +67,6 @@ public class PlayerService extends Service {
         buildStreaming(songPath);
 
         mMediaPlayer = new MediaPlayer();
-        mMediaController = new MediaController(this);
-        //mMediaController.setMediaPlayer(this);
-        //mMediaController.setAnchorView(audioView);
 
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -74,7 +74,6 @@ public class PlayerService extends Service {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-          //              mMediaController.show(10000);
                         mMediaPlayer.start();
                     }
                 });
@@ -174,9 +173,10 @@ public class PlayerService extends Service {
 
     @Override
     public void onDestroy() {
-        if (mMediaController != null) {
+        if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
+            mMediaPlayer = null;
         }
 
 
