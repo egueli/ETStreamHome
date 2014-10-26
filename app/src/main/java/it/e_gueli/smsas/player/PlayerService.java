@@ -43,6 +43,15 @@ public class PlayerService extends Service {
 
     private static final String TAG = PlayerService.class.getSimpleName();
 
+    private MediaPlayer mMediaPlayer;
+    private Handler mHandler = new Handler();
+    private static final int NOTIFICATION_ID = 665455242; // any number is OK as long it's not 0
+
+    @Bean
+    SftpManager sftpManager;
+
+    SimpleWebServer server;
+
     //region Binder stuff
 
     public class LocalBinder extends Binder {
@@ -60,8 +69,6 @@ public class PlayerService extends Service {
 
     //endregion
 
-    private MediaPlayer mMediaPlayer;
-    private Handler mHandler = new Handler();
 
     public void connectAndPlay(String songPath) {
         buildStreaming(songPath);
@@ -83,7 +90,6 @@ public class PlayerService extends Service {
         createNotification(songPath);
     }
 
-    private static final int NOTIFICATION_ID = 665455242; // any number is OK as long it's not 0
 
     private void createNotification(String songName) {
         PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
@@ -97,11 +103,6 @@ public class PlayerService extends Service {
                 "Playing: " + songName, pi);
         startForeground(NOTIFICATION_ID, notification);
     }
-
-    @Bean
-    SftpManager sftpManager;
-
-    SimpleWebServer server;
 
 
     @Background
