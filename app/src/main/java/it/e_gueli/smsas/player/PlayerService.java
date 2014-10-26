@@ -22,6 +22,7 @@ import org.androidannotations.annotations.UiThread;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 
@@ -69,6 +70,20 @@ public class PlayerService extends Service {
 
     //endregion
 
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        server = new SimpleWebServer("127.0.0.1", 8080, new File("/sdcard/Music"), false);
+        try {
+            server.start();
+        }
+        catch (IOException e) {
+            // TODO listen on random port, and let orphan NanoHTTPD thread close themselves.
+            throw new RuntimeException(e);
+        }
+    }
 
     public void connectAndPlay(String songPath) {
         buildStreaming(songPath);
@@ -147,12 +162,8 @@ public class PlayerService extends Service {
             }), size);
 
             if (server == null)
-                server = new SimpleWebServer("127.0.0.1", 8080, new File("/sdcard/Music"), false);
 
             server.setHttpStream(new BufferedInputStream(stream, 131072));
-
-            if (!server.isAlive())
-                server.start();
 
             startPlaying();
         }
@@ -180,6 +191,10 @@ public class PlayerService extends Service {
             mMediaPlayer = null;
         }
 
+        if (server != null) {
+            server.stop();
+            server = null;
+        }
 
         super.onDestroy();
     }
