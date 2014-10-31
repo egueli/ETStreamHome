@@ -77,6 +77,8 @@ public class PlayerService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        mMediaPlayer = new MediaPlayer();
+
         server = new SimpleWebServer("127.0.0.1", 8080, new File("/sdcard/Music"), false);
         try {
             server.start();
@@ -87,10 +89,13 @@ public class PlayerService extends Service {
         }
     }
 
+    public void setMediaController(MediaController.MediaPlayerControl control) {
+
+    }
+
     public void connectAndPlay(String songPath) {
         buildStreaming(songPath);
 
-        mMediaPlayer = new MediaPlayer();
 
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
