@@ -20,6 +20,7 @@ import java.util.ServiceLoader;
 import java.util.StringTokenizer;
 
 public class SimpleWebServer extends NanoHTTPD {
+    private static final String TAG = SimpleWebServer.class.getSimpleName();
     /**
      * Common mime type for dynamic content: binary
      */
@@ -225,6 +226,7 @@ public class SimpleWebServer extends NanoHTTPD {
     }
 
     public void setHttpStream(InputStream stream) {
+        Log.d(TAG, "will stream InputStream " + System.identityHashCode(stream));
         this.httpStream = stream;
     }
 
@@ -450,7 +452,7 @@ public class SimpleWebServer extends NanoHTTPD {
         Response res;
         try {
             if (file.getName().endsWith("stream.mp3")) {
-                Log.i(SimpleWebServer.class.getSimpleName(), "Serving streamed content!!");
+                Log.d(TAG, "Serving streamed content" + System.identityHashCode(httpStream));
                 res = createResponse(Response.Status.OK, mime, httpStream);
             }
             else {

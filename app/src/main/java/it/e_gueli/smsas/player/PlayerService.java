@@ -42,6 +42,8 @@ public class PlayerService extends Service {
     // TODO audio focus
     // TODO audio becoming noisy
 
+    // TODO link PlayerService with an activity to prompt for sftp-related user interaction
+
     private static final String TAG = PlayerService.class.getSimpleName();
 
     private MediaPlayer mMediaPlayer;
@@ -160,8 +162,6 @@ public class PlayerService extends Service {
                     Log.d(TAG, "end()");
                 }
             }), size);
-
-            if (server == null)
 
             server.setHttpStream(new BufferedInputStream(stream, 131072));
 
