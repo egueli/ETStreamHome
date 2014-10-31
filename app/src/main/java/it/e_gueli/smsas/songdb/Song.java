@@ -11,12 +11,31 @@ public class Song {
     @DatabaseField(generatedId = true)
     int index;
 
-    @DatabaseField(unique = true, canBeNull = false)
+    /**
+     * The repository that holds this song. Can be "local" or "sftp".
+     */
+    @DatabaseField(uniqueCombo = true, canBeNull = false)
+    String repository;
+
+    /**
+     * The path in the repository where the song can be found.
+     * If the repo is "local", this is the absolute filesystem path.
+     * If the repo is "sftp", this is relative to the SFTP user base directory.
+     */
+    @DatabaseField(uniqueCombo = true, canBeNull = false)
     String fullPath;
 
     /** The string to show to the user. Duplicates are OK.*/
     @DatabaseField(canBeNull = false)
     String name;
+
+    public String getRepository() {
+        return repository;
+    }
+
+    public void setRepository(String repository) {
+        this.repository = repository;
+    }
 
     public String getFullPath() {
         return fullPath;

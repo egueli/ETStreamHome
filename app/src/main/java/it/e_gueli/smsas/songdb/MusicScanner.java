@@ -26,6 +26,9 @@ import java.util.regex.Pattern;
 public class MusicScanner {
     private static final String TAG = MusicScanner.class.getSimpleName();
 
+    // TODO make this abstract to implement repo-specific scanners
+    // (i.e. for local file, plain FTP, Dropbox...)
+
     public interface ProgressListener {
         void onNewDir(String path);
     }
@@ -37,6 +40,7 @@ public class MusicScanner {
     Dao<WordMatch, Integer> wordDao;
 
     private PreparedQuery<Song> songInDbQuery;
+    SelectArg repoArg = new SelectArg();
     SelectArg fullPathArg = new SelectArg();
 
     private ProgressListener progressListener;
@@ -44,7 +48,11 @@ public class MusicScanner {
     @AfterInject
     void prepareQueries() {
         try {
-            songInDbQuery = songDao.queryBuilder().where().eq("fullPath", fullPathArg).prepare();
+            songInDbQuery = songDao.queryBuilder().where()
+                    .eq("fullPath", fullPathArg)
+                    .and()
+                    .eq("repository", fullPathArg)
+                    .prepare();
         }
         catch (SQLException se) {
             throw new RuntimeException(se);
@@ -55,6 +63,7 @@ public class MusicScanner {
         progressListener = listener;
     }
 
+    // TODO user-selectable remote base directory
     public void doMusicScan(ChannelSftp channelSftp) throws SftpException, SQLException {
         scanRecursive(channelSftp, "./Musica");
     }
@@ -87,6 +96,7 @@ public class MusicScanner {
                 fullPathArg.setValue(fullPath);
                 if (songDao.query(songInDbQuery).isEmpty()) {
                     Log.v(TAG, "adding to db:  " + fullPath);
+                    song.setRepository("sftp");
                     song.setFullPath(fullPath);
                     song.setName(base);
                     songDao.create(song);
