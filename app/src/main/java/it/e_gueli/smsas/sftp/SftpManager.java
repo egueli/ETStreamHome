@@ -32,6 +32,14 @@ public class SftpManager {
     @Pref
     SftpPrefs_ prefs;
 
+    /*
+    TODO public key authentication
+    - the app creates an own private/public key pair.
+    - the app sends the public key to Pastebin
+    - the app invites the user to log in to his SSH server and paste a command like
+      curl http://pastebin.com/abcdefgh >> .ssh/authorized_keys
+     */
+
     public ChannelSftp connectAndGetSftpChannel() throws JSchException {
         JSch jsch = new JSch();
         jsch.setKnownHosts(context.getFilesDir().getAbsolutePath() + File.separator + "jsch_known_hosts");
