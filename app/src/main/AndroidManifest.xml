@@ -24,6 +24,11 @@
             android:name=".ui.SettingsActivity_"
             android:label="@string/action_settings" />
 
+        <activity
+            android:name=".ui.PlayerActivity_"
+            android:label="Now Playing"
+            />
+
         <service android:name=".player.PlayerService_" />
     </application>
 

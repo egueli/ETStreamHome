@@ -92,6 +92,7 @@ public class MyActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Song song = songDao.queryForId((int)id);
                 playerService.connectAndPlay(song.getFullPath());
+                PlayerActivity_.intent(MyActivity.this).start();
             }
         });
     }
