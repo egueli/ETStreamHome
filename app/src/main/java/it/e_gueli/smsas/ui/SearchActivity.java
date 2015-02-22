@@ -35,7 +35,7 @@ import it.e_gueli.smsas.songdb.DatabaseHelper;
 import it.e_gueli.smsas.songdb.MusicScanner;
 import it.e_gueli.smsas.songdb.Song;
 
-@EActivity(R.layout.activity_my)
+@EActivity(R.layout.activity_search)
 @OptionsMenu(R.menu.my)
 public class SearchActivity extends Activity {
 

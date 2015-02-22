@@ -20,7 +20,7 @@ import it.e_gueli.smsas.player.PlayerService_;
 /**
  * Created by presentation on 31/10/14.
  */
-@EActivity(R.layout.player)
+@EActivity(R.layout.activity_nowplaying)
 public class PlayerActivity extends Activity implements MediaController.MediaPlayerControl {
 
     PlayerService playerService;
