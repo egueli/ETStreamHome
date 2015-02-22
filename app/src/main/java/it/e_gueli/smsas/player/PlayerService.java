@@ -47,6 +47,10 @@ public class PlayerService extends Service {
     private Handler mHandler = new Handler();
     private static final int NOTIFICATION_ID = 665455242; // any number is OK as long it's not 0
 
+    private State state;
+
+    public static final String ACTION_STATE_CHANGED = "it.e_gueli.smsas.PLAYER_STATE_CHANGED";
+
     @Bean
     SftpManager sftpManager;
 
@@ -75,6 +79,8 @@ public class PlayerService extends Service {
         super.onCreate();
 
         mMediaPlayer = new MediaPlayer();
+        state = new State();
+        state.listenToMediaPlayer(mMediaPlayer);
 
         server = new SimpleWebServer("127.0.0.1", 8080, new File("/sdcard/Music"), false);
         try {
@@ -93,16 +99,17 @@ public class PlayerService extends Service {
     public void connectAndPlay(String songPath) {
         buildStreaming(songPath);
 
-
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
+                        state.setPlayerState(PlayerState.PLAYING);
                         mMediaPlayer.start();
                     }
                 });
+                state.onPrepared(mediaPlayer);
             }
         });
 
@@ -127,6 +134,8 @@ public class PlayerService extends Service {
     @Background
     void buildStreaming(String songPath) {
         try {
+            state.setPlayerState(PlayerState.LOADING);
+
             ChannelSftp channel = sftpManager.connectAndGetSftpChannel();
 
             String dir = "";
@@ -185,6 +194,10 @@ public class PlayerService extends Service {
         }
     }
 
+    public PlayerState getPlayerState() {
+        return state.playerState;
+    }
+
     @Override
     public void onDestroy() {
         if (mMediaPlayer != null) {
@@ -201,4 +214,95 @@ public class PlayerService extends Service {
         super.onDestroy();
     }
 
+    public enum PlayerState {
+        IDLE,
+        LOADING,
+        PLAYING,
+        PAUSED
+    }
+
+    public class State implements MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener, MediaPlayer.OnSeekCompleteListener {
+        private PlayerState playerState = PlayerState.IDLE;
+
+        private void setPlayerState(PlayerState playerState) {
+            if (playerState == this.playerState)
+                return;
+
+            this.playerState = playerState;
+            sendBroadcast(new Intent(ACTION_STATE_CHANGED));
+
+        }
+
+        private void listenToMediaPlayer(MediaPlayer player) {
+            player.setOnBufferingUpdateListener(this);
+            player.setOnCompletionListener(this);
+            player.setOnErrorListener(this);
+            player.setOnInfoListener(this);
+            //player.setOnPreparedListener(this); NOT added; PlayerService handles this
+            player.setOnSeekCompleteListener(this);
+        }
+
+        @Override
+        public void onBufferingUpdate(MediaPlayer player, int i) {
+            Log.d(TAG, String.format("onBufferingUpdate: %2d%%", i));
+            sendBroadcast(new Intent(ACTION_STATE_CHANGED));
+        }
+
+        @Override
+        public void onCompletion(MediaPlayer player) {
+            Log.d(TAG, "onCompletion()");
+            sendBroadcast(new Intent(ACTION_STATE_CHANGED));
+
+        }
+
+        @Override
+        public boolean onError(MediaPlayer player, int what, int extra) {
+            String whatStr;
+            switch (what) {
+                case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+                    whatStr = "server died";
+                    break;
+                default:
+                    whatStr = "unknown cause " + what;
+            }
+            String extraStr;
+            switch (extra) {
+                case MediaPlayer.MEDIA_ERROR_IO:
+                    extraStr = "I/O error";
+                    break;
+                case MediaPlayer.MEDIA_ERROR_MALFORMED:
+                    extraStr = "Malformed";
+                    break;
+                case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
+                    extraStr = "Timed out";
+                    break;
+                case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
+                    extraStr = "Unsupported";
+                    break;
+                default:
+                    extraStr = "unknown detail " + extra;
+            }
+
+            Log.e(TAG, "onError: what=" + what + " extra=" + extra);
+            sendBroadcast(new Intent(ACTION_STATE_CHANGED));
+
+            return false;
+        }
+
+        @Override
+        public boolean onInfo(MediaPlayer player, int i, int i2) {
+            sendBroadcast(new Intent(ACTION_STATE_CHANGED));
+
+            return false;
+        }
+
+        public void onPrepared(MediaPlayer player) {
+            sendBroadcast(new Intent(ACTION_STATE_CHANGED));
+        }
+
+        @Override
+        public void onSeekComplete(MediaPlayer player) {
+            sendBroadcast(new Intent(ACTION_STATE_CHANGED));
+        }
+    }
 }
