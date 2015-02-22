@@ -4,21 +4,16 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.ServiceConnection;
-import android.media.MediaPlayer;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.TextView;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.SftpProgressMonitor;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -31,16 +26,9 @@ import org.androidannotations.annotations.OrmLiteDao;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.util.Vector;
-
-import fi.iki.elonen.SimpleWebServer;
 import it.e_gueli.smsas.R;
 import it.e_gueli.smsas.player.PlayerService;
 import it.e_gueli.smsas.player.PlayerService_;
-import it.e_gueli.smsas.sftp.InputStreamWithAvailable;
 import it.e_gueli.smsas.sftp.SftpManager;
 import it.e_gueli.smsas.sftp.StoredOrAskedUserInfo;
 import it.e_gueli.smsas.songdb.DatabaseHelper;
@@ -49,9 +37,9 @@ import it.e_gueli.smsas.songdb.Song;
 
 @EActivity(R.layout.activity_my)
 @OptionsMenu(R.menu.my)
-public class MyActivity extends Activity {
+public class SearchActivity extends Activity {
 
-    private static final String TAG = MyActivity.class.getSimpleName();
+    private static final String TAG = SearchActivity.class.getSimpleName();
 
 
 
@@ -92,7 +80,7 @@ public class MyActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Song song = songDao.queryForId((int)id);
                 playerService.connectAndPlay(song.getFullPath());
-                PlayerActivity_.intent(MyActivity.this).start();
+                PlayerActivity_.intent(SearchActivity.this).start();
             }
         });
     }

@@ -8,9 +8,7 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.MediaController;
 
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpProgressMonitor;
@@ -27,10 +25,9 @@ import java.io.InputStream;
 import java.util.Vector;
 
 import fi.iki.elonen.SimpleWebServer;
-import it.e_gueli.smsas.R;
 import it.e_gueli.smsas.sftp.InputStreamWithAvailable;
 import it.e_gueli.smsas.sftp.SftpManager;
-import it.e_gueli.smsas.ui.MyActivity_;
+import it.e_gueli.smsas.ui.SearchActivity_;
 
 /**
  * Created by ris8 on 26/10/14.
@@ -115,7 +112,7 @@ public class PlayerService extends Service {
 
     private void createNotification(String songName) {
         PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
-                MyActivity_.intent(getApplicationContext()).get(),
+                SearchActivity_.intent(getApplicationContext()).get(),
                 PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new Notification();
         notification.tickerText = "Song playing"; // TODO pass a Song object so we get the title
