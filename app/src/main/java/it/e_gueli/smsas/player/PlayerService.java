@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -17,6 +18,7 @@ import com.jcraft.jsch.SftpProgressMonitor;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EService;
+import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 
 import java.io.BufferedInputStream;
@@ -52,6 +54,9 @@ public class PlayerService extends Service {
 
     public static final String ACTION_STATE_CHANGED = "it.e_gueli.smsas.PLAYER_STATE_CHANGED";
 
+    @SystemService
+    WifiManager wifiManager;
+
     @Bean
     SftpManager sftpManager;
 
@@ -81,7 +86,7 @@ public class PlayerService extends Service {
 
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-        
+
         state = new State();
         state.listenToMediaPlayer(mMediaPlayer);
 
@@ -160,9 +165,13 @@ public class PlayerService extends Service {
             long size = songEntry.getAttrs().getSize();
 
             InputStream stream = new InputStreamWithAvailable(channel.get(songEntry.getFilename(), new SftpProgressMonitor() {
+                private WifiManager.WifiLock wifiLock;
+
                 @Override
                 public void init(int op, String src, String dest, long max) {
                     Log.d(TAG, String.format("init() op=%d src=%s dest=%s max=%d", op, src, dest, max));
+                    wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "it.e_gueli.smsas");
+                    wifiLock.acquire();
                 }
 
                 @Override
@@ -173,7 +182,18 @@ public class PlayerService extends Service {
 
                 @Override
                 public void end() {
+                    wifiLock.release();
+                    wifiLock = null;
                     Log.d(TAG, "end()");
+                }
+
+                @Override
+                protected void finalize() throws Throwable {
+                    if (wifiLock != null) {
+                        wifiLock.release();
+                        wifiLock = null;
+                    }
+                    super.finalize();
                 }
             }), size);
 
