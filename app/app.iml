@@ -88,7 +88,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="jsch-0.1.44-1" level="project" />
     <orderEntry type="library" exported="" name="ormlite-core-4.45" level="project" />
-    <orderEntry type="library" exported="" name="androidannotations-api-3.0.1" level="project" />
+    <orderEntry type="library" exported="" name="androidannotations-api-3.2" level="project" />
     <orderEntry type="library" exported="" name="ormlite-android-4.45" level="project" />
   </component>
 </module>

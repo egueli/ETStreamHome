@@ -36,8 +36,8 @@ apt {
 }
 
 dependencies {
-    apt "org.androidannotations:androidannotations:3.0+"
-    compile "org.androidannotations:androidannotations-api:3.0+"
+    apt "org.androidannotations:androidannotations:3.2"
+    compile "org.androidannotations:androidannotations-api:3.2"
     compile 'com.jcraft:jsch:0.1.44-1'
     compile 'com.j256.ormlite:ormlite-core:4.23'
     compile 'com.j256.ormlite:ormlite-android:4.45'

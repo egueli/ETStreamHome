@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.ServiceConnection;
+import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.view.View;
 import android.widget.MediaController;
 
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.SupposeUiThread;
 import org.androidannotations.annotations.ViewById;
 
 import it.e_gueli.smsas.R;
@@ -24,8 +27,12 @@ public class PlayerActivity extends Activity implements MediaController.MediaPla
 
     ServiceConnection playerServiceConnection;
 
-    @ViewById
     MediaController mediaController;
+
+    MediaPlayer mediaPlayer;
+
+    @ViewById(R.id.audioView)
+    View anchorView;
 
     @Override
     protected void onStart() {
@@ -49,12 +56,20 @@ public class PlayerActivity extends Activity implements MediaController.MediaPla
         bindService(PlayerService_.intent(this).get(), playerServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    private void onPlayerServiceConnected() {
+    @SupposeUiThread
+    void onPlayerServiceConnected() {
+        mediaPlayer = playerService.getMediaPlayer();
+        mediaController = new MediaController(this);
         mediaController.setMediaPlayer(this);
+        mediaController.setAnchorView(anchorView);
+        mediaController.setEnabled(true);
+        mediaController.show(3000);
+        //mediaController.setAnchorView(anchorView);
     }
 
     @Override
     protected void onStop() {
+        mediaController.hide();
         disconnectFromPlayerService();
 
         super.onStop();
@@ -70,32 +85,32 @@ public class PlayerActivity extends Activity implements MediaController.MediaPla
 
     @Override
     public void start() {
-        
+        mediaPlayer.start();
     }
 
     @Override
     public void pause() {
-
+        mediaPlayer.pause();
     }
 
     @Override
     public int getDuration() {
-        return 0;
+        return mediaPlayer.getDuration();
     }
 
     @Override
     public int getCurrentPosition() {
-        return 0;
+        return mediaPlayer.getCurrentPosition();
     }
 
     @Override
     public void seekTo(int i) {
-
+        mediaPlayer.seekTo(i);
     }
 
     @Override
     public boolean isPlaying() {
-        return false;
+        return mediaPlayer.isPlaying();
     }
 
     @Override
@@ -105,7 +120,7 @@ public class PlayerActivity extends Activity implements MediaController.MediaPla
 
     @Override
     public boolean canPause() {
-        return false;
+        return true;
     }
 
     @Override
@@ -120,6 +135,6 @@ public class PlayerActivity extends Activity implements MediaController.MediaPla
 
     @Override
     public int getAudioSessionId() {
-        return 0;
+        return mediaPlayer.getAudioSessionId();
     }
 }

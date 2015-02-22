@@ -89,8 +89,8 @@ public class PlayerService extends Service {
         }
     }
 
-    public void setMediaController(MediaController.MediaPlayerControl control) {
-
+    public MediaPlayer getMediaPlayer() {
+        return mMediaPlayer;
     }
 
     public void connectAndPlay(String songPath) {
