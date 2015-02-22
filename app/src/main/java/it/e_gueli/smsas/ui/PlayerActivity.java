@@ -77,7 +77,7 @@ public class PlayerActivity extends Activity {
         }
     }
 
-    @Receiver(actions = PlayerService.ACTION_STATE_CHANGED)
+    @Receiver(actions = PlayerService.ACTION_STATE_CHANGED, registerAt = Receiver.RegisterAt.OnResumeOnPause)
     void onPlayerStateChange() {
         playerStatus.setText(playerService.getPlayerState().name());
     }
