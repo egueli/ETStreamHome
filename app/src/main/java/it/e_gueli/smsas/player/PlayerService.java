@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
 
 import com.jcraft.jsch.ChannelSftp;
@@ -79,6 +80,8 @@ public class PlayerService extends Service {
         super.onCreate();
 
         mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+        
         state = new State();
         state.listenToMediaPlayer(mMediaPlayer);
 
