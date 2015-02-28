@@ -30,6 +30,7 @@ import java.util.Vector;
 import fi.iki.elonen.SimpleWebServer;
 import it.e_gueli.smsas.sftp.InputStreamWithAvailable;
 import it.e_gueli.smsas.sftp.SftpManager;
+import it.e_gueli.smsas.ui.PlayerActivity_;
 import it.e_gueli.smsas.ui.SearchActivity_;
 
 /**
@@ -53,6 +54,9 @@ public class PlayerService extends Service {
     private State state;
 
     public static final String ACTION_STATE_CHANGED = "it.e_gueli.smsas.PLAYER_STATE_CHANGED";
+
+    private static final String ACTION_PLAY = "it.e_gueli.smsas.PLAY";
+    private static final String EXTRA_PATH = "path";
 
     @SystemService
     WifiManager wifiManager;
@@ -105,36 +109,56 @@ public class PlayerService extends Service {
     }
 
     public void connectAndPlay(String songPath) {
-        buildStreaming(songPath);
-
-        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        state.setPlayerState(PlayerState.PLAYING);
-                        mMediaPlayer.start();
-                    }
-                });
-                state.onPrepared(mediaPlayer);
-            }
-        });
-
-        createNotification(songPath);
+        // can't do the stuff here, but start the service instead. This will prevent the service to
+        // be killed when it is unbound.
+        // Same issue as http://stackoverflow.com/q/22895001
+        PlayerService_.intent(this)
+                .action(ACTION_PLAY)
+                .extra(EXTRA_PATH, songPath)
+                .start();
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent == null) {
+            // TODO service restarted, resume playback
+            return START_NOT_STICKY;
+        }
+        else {
+            String songPath = intent.getStringExtra(EXTRA_PATH);
+            buildStreaming(songPath);
+
+            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            state.setPlayerState(PlayerState.PLAYING);
+                            mMediaPlayer.start();
+                        }
+                    });
+                    state.onPrepared(mediaPlayer);
+                }
+            });
+
+            createNotification(songPath);
+            return START_STICKY;
+        }
+    }
 
     private void createNotification(String songName) {
         PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
-                SearchActivity_.intent(getApplicationContext()).get(),
+                PlayerActivity_.intent(getApplicationContext()).get(),
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new Notification();
-        notification.tickerText = "Song playing"; // TODO pass a Song object so we get the title
-        notification.icon = android.R.drawable.ic_media_play;
-        notification.flags |= Notification.FLAG_ONGOING_EVENT;
-        notification.setLatestEventInfo(getApplicationContext(), "MusicPlayerSample",
-                "Playing: " + songName, pi);
+
+        Notification notification = (new Notification.Builder(getApplicationContext()))
+                .setSmallIcon(android.R.drawable.ic_media_play)
+                .setContentTitle("Playing from SFTP")
+                .setContentText(songName)
+                .setContentIntent(pi)
+                .setOngoing(true)
+                .build();
         startForeground(NOTIFICATION_ID, notification);
     }
 
@@ -223,6 +247,7 @@ public class PlayerService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.i(TAG, "onDestroy()");
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
